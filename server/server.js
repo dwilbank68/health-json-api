@@ -45,8 +45,8 @@ app.post('/days', authenticate, (req,res) => {
         .then(
             (day) => {
                 if (day.length) {
-                    console.log("updating existing day's data");
-                    console.log('day._id', day[0]._id);
+                    console.log("updating existing entry - day._id", day[0]._id );
+                    console.log();
 
                     Day.findByIdAndUpdate(
                         day[0]._id,
@@ -106,26 +106,30 @@ app.post('/days', authenticate, (req,res) => {
 //         )
 // })
 
-// app.get('/todos/:id', authenticate, (req,res) => {
-//     var id = req.params.id
+app.get('/date/:date', authenticate, (req,res) => {
+    let dateMilliseconds = parseInt(req.params.date);
+    let date = new Date(dateMilliseconds);
 
 //     if (!ObjectID.isValid(id)){
 //         return res.status(404).send();
 //     }
 
-//     Todo
-//         .findOne({
-//             _id: id,
-//             _creator: req.user._id
-//         })
-//         .then((todo)=>{
-//             if (!todo) { return res.status(404).send(); }
-//             res.send({todo})
-//         })
-//         .catch((err)=>{
-//             res.status(400).send();
-//         })
-// })
+    Day.find({
+        _creator: req.user._id,
+        date: date
+    })
+    .then((day)=>{
+        if (!day) {
+            console.log('found no day');
+            return res.status(404).send();
+        }
+        console.log('found day', day);
+        res.send({day})
+    })
+    .catch((err)=>{
+        res.status(400).send();
+    })
+})
 
 // app.delete('/todos/:id', authenticate, (req,res) => {
 //     var id = req.params.id
@@ -185,7 +189,6 @@ app.post('/days', authenticate, (req,res) => {
 
 
 app.get('/users/me', authenticate, (req,res) => {
-    console.log('hey doggy');
     res.send(req.user)
 })
 
