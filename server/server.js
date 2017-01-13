@@ -38,7 +38,8 @@ app.use(function(req,res,next){
 
 app.post('/days', authenticate, (req,res) => {
 
-    Day.find({
+    Day
+        .find({
             _creator: req.user._id,
             date: req.body.date
         })
@@ -46,30 +47,24 @@ app.post('/days', authenticate, (req,res) => {
             (day) => {
                 if (day.length) {
                     console.log("updating existing entry - day._id", day[0]._id );
-                    console.log();
-
                     Day.findByIdAndUpdate(
                         day[0]._id,
                         req.body,
-                        {new:true},
-                        (err, updatedDay) => {
-                            if (err) throw err;
-                            console.log('updatedDay', updatedDay);
+                        {new:true}
+                    )
+                    .then(
+                        (response) => {
+                            res.send(response);
+                            console.log('findByIdAndUpdate success');
+                        },
+                        (err) => {
+                            console.log('findByIdAndUpdate failure');
+                            res.send(err);
                         }
                     )
-                    // .then(
-                    //     (response) => {
-                    //         res.send(response);
-                    //         console.log('findByIdAndUpdate success');
-                    //     },
-                    //     (err) => {
-                    //         console.log('findByIdAndUpdate failure');
-                    //         res.send(err);
-                    //     }
-                    // )
-                    // .catch(
-                    //     (caughtError) => { console.log('error in update catch block', caughtError);}
-                    // )
+                    .catch(
+                        (caughtError) => { console.log('error in update catch block', caughtError);}
+                    )
 
                 } else {
                     console.log('did not find same date');
