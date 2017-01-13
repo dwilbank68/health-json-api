@@ -47,24 +47,19 @@ app.post('/days', authenticate, (req,res) => {
             (day) => {
                 if (day.length) {
                     console.log("updating existing entry - day._id", day[0]._id );
-                    Day.findByIdAndUpdate(
-                        day[0]._id,
-                        req.body,
-                        {new:true}
-                    )
-                    .then(
-                        (response) => {
-                            res.send(response);
-                            console.log('findByIdAndUpdate success');
-                        },
-                        (err) => {
-                            console.log('findByIdAndUpdate failure');
-                            res.send(err);
-                        }
-                    )
-                    .catch(
-                        (caughtError) => { console.log('error in update catch block', caughtError);}
-                    )
+                    Day
+                        .findByIdAndUpdate(
+                            day[0]._id,
+                            req.body,
+                            {new:true}
+                        )
+                        .then(
+                            (response) => { res.send(response); },
+                            (err) => { res.send(err); }
+                        )
+                        .catch(
+                            (err) => { console.log('error in update catch block', err);}
+                        )
 
                 } else {
                     console.log('did not find same date');
@@ -74,34 +69,34 @@ app.post('/days', authenticate, (req,res) => {
                     newDay
                         .save()
                         .then(
-                            (doc)=>{
-                                res.send('new day added');
-                            },
-                            (err)=>{
-                                res.status(400).send(err);
-                            }
+                            (doc)=>{ res.send('new day added'); },
+                            (err)=>{ res.status(400).send(err); }
                         )
-                        .catch(
-                            (err) => { console.log('some error', err);}
-                        )
+                        .catch( (err) => { console.log('some error', err);} )
                 }
             }
         )
 });  
 
-// app.get('/todos', authenticate, (req,res) => {
-//     Todo.find({_creator: req.user._id})
-//         .then(
-//             (todos)=>{
-//                 res.send({todos})
-//             },
-//             (err)=>{
-//                 res.status(400).send(err);
-//             }
-//         )
-// })
+app
+    .get('/days', authenticate, (req,res) => {
+        Day
+            .find( {_creator: req.user._id} )
+            .select('date weight heartrate diastolic systolic saltTotal waterTotal')
+            .sort('date')
+            .then(
+                (data)=>{
+                    console.log('data',data);
+                    
+                    res.send({data});
+                },
+                (err)=>{
+                    res.status(400).send(err);
+                }
+            )
+    })
 
-app.get('/date/:date', authenticate, (req,res) => {
+app.get('/day/:date', authenticate, (req,res) => {
     let dateMilliseconds = parseInt(req.params.date);
     let date = new Date(dateMilliseconds);
 
@@ -109,21 +104,18 @@ app.get('/date/:date', authenticate, (req,res) => {
 //         return res.status(404).send();
 //     }
 
-    Day.find({
-        _creator: req.user._id,
-        date: date
-    })
-    .then((day)=>{
-        if (!day) {
-            console.log('found no day');
-            return res.status(404).send();
-        }
-        console.log('found day', day);
-        res.send({day})
-    })
-    .catch((err)=>{
-        res.status(400).send();
-    })
+    Day
+        .find({
+            _creator: req.user._id,
+            date: date
+        })
+        .then((day)=>{
+            if (!day) { return res.status(404).send(); }
+            res.send({day})
+        })
+        .catch((err)=>{
+            res.status(400).send(err);
+        })
 })
 
 // app.delete('/todos/:id', authenticate, (req,res) => {
