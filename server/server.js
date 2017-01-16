@@ -5,6 +5,7 @@ const express = require("express");
 const bodyParser = require('body-parser');
 var morgan = require('morgan');
 const { ObjectID } = require('mongodb');
+const moment = require('moment');
 
 var {mongoose} = require('./db/mongoose');
 var {Todo} = require('./models/todo');
@@ -82,13 +83,22 @@ app
     .get('/days', authenticate, (req,res) => {
         Day
             .find( {_creator: req.user._id} )
-            .select('date weight heartrate diastolic systolic saltTotal waterTotal')
+            .select('date weight heartrate diastolic systolic saltTotal waterTotal -_id')
             .sort('date')
             .then(
                 (data)=>{
-                    console.log('data',data);
-                    
-                    res.send({data});
+                    let chartData = data.map( datum => {
+                        return {
+                            weight:datum.weight,
+                            heartrate:datum.heartrate,
+                            diastolic:datum.diastolic,
+                            systolic:datum.systolic,
+                            saltTotal:datum.saltTotal,
+                            waterTotal:datum.waterTotal,
+                            date: moment(datum.date).format('YYYY-MM-DD ddd')
+                        };
+                    })
+                    res.send({chartData});
                 },
                 (err)=>{
                     res.status(400).send(err);
