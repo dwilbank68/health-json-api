@@ -79,8 +79,7 @@ app.post('/days', authenticate, (req,res) => {
         )
 });  
 
-app
-    .get('/days', authenticate, (req,res) => {
+app.get('/days', authenticate, (req,res) => {
         Day
             .find( {_creator: req.user._id} )
             .select('date weight heartrate diastolic systolic saltTotal waterTotal -_id')
@@ -109,12 +108,13 @@ app
 app.get('/day/:date', authenticate, (req,res) => {
     let dateMilliseconds = parseInt(req.params.date);
     let date = new Date(dateMilliseconds);
-
-//     if (!ObjectID.isValid(id)){
-//         return res.status(404).send();
-//     }
+    // let earlier = new Date(dateMilliseconds).setHours(date.getHours()-3);
 
     Day
+        // .find({
+        //     _creator: req.user._id,
+        //     date: {"$gte": earlier, "$lt": date}
+        // })
         .find({
             _creator: req.user._id,
             date: date
