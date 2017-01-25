@@ -38,21 +38,16 @@ app.use(function(req,res,next){
 });
 
 app.post('/days', authenticate, (req,res) => {
-    let date = new Date(req.body.date);
-    let earlier = new Date(req.body.date).setHours(date.getHours()-3);
-    console.log('------------------------------------------');
-    console.log('date in post/days',date.toString());
-    console.log('earlier date in post/days',earlier.toString());
-    console.log('------------------------------------------');
+
     Day
         .find({
             _creator: req.user._id,
-            date: {"$gte": earlier, "$lt": date}//req.body.date
+            date: req.body.dateString
         })
         .then(
             (day) => {
                 console.log('------------------------------------------');
-                console.log('day',day);
+                console.log('day in app.post/days',day);
                 console.log('------------------------------------------');
 
                 if (day.length > 0) {
@@ -114,29 +109,29 @@ app.get('/days', authenticate, (req,res) => {
             )
     })
 
-app.get('/day/:date', authenticate, (req,res) => {
-    let dateMilliseconds = parseInt(req.params.date);
-    let date = new Date(dateMilliseconds);
+app.get('/day/:dateString', authenticate, (req,res) => {
     console.log('------------------------------------------');
-    console.log('date',date.toString());
+    console.log('req.params ',req.params);
     console.log('------------------------------------------');
-
-    let earlier = new Date(dateMilliseconds).setHours(date.getHours()-3);
-    console.log('------------------------------------------');
-    console.log('earlier',earlier.toString());
-    console.log('------------------------------------------');
-
     Day
         .find({
             _creator: req.user._id,
-            date: {"$gte": earlier, "$lt": date}
+            dateString: req.params.dateString
         })
         // .find({
         //     _creator: req.user._id,
         //     date: date
         // })
         .then((day)=>{
-            if (!day) { return res.status(404).send(); }
+            day = day[0];
+            console.log('------------------------------------------');
+            console.log('day in app.get day/date',day);
+            console.log('------------------------------------------');
+            if (!day) {
+                console.log('did not find day', req.params.dateString);
+                // return res.status(404).send();
+                return res.send(false);
+            }
             res.send({day})
         })
         .catch((err)=>{
