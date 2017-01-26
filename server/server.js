@@ -38,11 +38,14 @@ app.use(function(req,res,next){
 });
 
 app.post('/days', authenticate, (req,res) => {
-
+    console.log('------------------------------------------');
+    console.log('req.body.dateString in app.post /days', typeof req.body.dateString);
+    console.log('_creator is', typeof req.user._id);
+    console.log('------------------------------------------');
     Day
         .find({
             _creator: req.user._id,
-            date: req.body.dateString
+            dateString: req.body.dateString
         })
         .then(
             (day) => {
@@ -110,9 +113,6 @@ app.get('/days', authenticate, (req,res) => {
     })
 
 app.get('/day/:dateString', authenticate, (req,res) => {
-    console.log('------------------------------------------');
-    console.log('req.params ',req.params);
-    console.log('------------------------------------------');
     Day
         .find({
             _creator: req.user._id,
@@ -124,12 +124,8 @@ app.get('/day/:dateString', authenticate, (req,res) => {
         // })
         .then((day)=>{
             day = day[0];
-            console.log('------------------------------------------');
-            console.log('day in app.get day/date',day);
-            console.log('------------------------------------------');
             if (!day) {
                 console.log('did not find day', req.params.dateString);
-                // return res.status(404).send();
                 return res.send(false);
             }
             res.send({day})
@@ -138,63 +134,6 @@ app.get('/day/:dateString', authenticate, (req,res) => {
             res.status(400).send(err);
         })
 })
-
-// app.delete('/todos/:id', authenticate, (req,res) => {
-//     var id = req.params.id
-
-//     if (!ObjectID.isValid(id)){
-//         return res.status(404).send();
-//     }
-
-//     Todo
-//         .findOneAndRemove({
-//             _id: id,
-//             _creator: req.user._id
-//         })
-//         .then((todo)=>{
-//             if (!todo) { return res.status(404).send(); }
-//             res.send({todo})
-//         })
-//         .catch((err)=>{
-//             res.status(400).send();
-//         })
-// })
-
-// app
-//     .patch('/todos/:id', authenticate, (req,res) => {
-//         var id = req.params.id; 
-//         var body = req.body;
-
-//         if (!ObjectID.isValid(id)){
-//             return res.status(404).send();
-//         }
-
-//         console.log('body', body);
-
-        // if (_.isBoolean(body.completed) && body.completed){
-        //     body.completedAt = new Date().getTime();
-        // } else {
-        //     body.completed = false;
-        //     body.completedAt = null;
-        // }
-
-        // Todo
-        //     .findOneAndUpdate(
-        //         {_id:id, _creator: req.user._id},
-        //         {$set: body},
-        //         {new:true}
-        //     )
-        //     .then((todo)=>{
-        //         if (!todo) { return res.status(404).send(); }
-        //         res.send({todo})
-        //     })
-        //     .catch((err)=>{
-        //         res.status(400).send();
-        //     })
-    // })
-
-
-
 
 app.get('/users/me', authenticate, (req,res) => {
     res.send(req.user)
