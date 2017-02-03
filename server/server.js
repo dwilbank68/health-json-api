@@ -19,7 +19,8 @@ const port = process.env.PORT;
 var app = express();
 
 app.use(bodyParser.json());
-app.use(morgan('combined'));
+// app.use(morgan('combined'));
+app.use(morgan('dev'));
 
 
 // app.use((req, res, next)=> {
@@ -39,8 +40,8 @@ app.use(function(req,res,next){
 
 app.post('/days', authenticate, (req,res) => {
     console.log('------------------------------------------');
-    console.log('req.body.dateString in app.post /days', typeof req.body.dateString);
-    console.log('_creator is', typeof req.user._id);
+    console.log('req.body.dateString in app.post /days', req.body.dateString);
+    console.log('_creator is', req.user._id);
     console.log('------------------------------------------');
     Day
         .find({
@@ -125,8 +126,10 @@ app.get('/day/:dateString', authenticate, (req,res) => {
         .then((day)=>{
             day = day[0];
             if (!day) {
-                console.log('did not find day', req.params.dateString);
-                return res.send(false);
+                console.log('------------------------------------------');
+                console.log(' get /day/date - did not find day', req.params.dateString);
+                console.log('------------------------------------------');
+                return res.status(200).send({'day':false});
             }
             res.send({day})
         })
