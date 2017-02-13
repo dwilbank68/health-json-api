@@ -143,21 +143,51 @@ app.get('/users/me', authenticate, (req,res) => {
 })
 
 app.post('/users', (req,res) => {
-    var body = _.pick(req.body, ['email', 'password']);
-    var user = new User(body);
+    const email = req.body.email;
 
-    user.save()
-        .then(()=>{
-            return user.generateAuthToken();
-        })
-        .then((token)=>{
-            res
-                .header('x-auth', token)
-                .send(user);
-        })
-        .catch((e)=>{
-            res.status(400).send(e);
-        })
+    User
+        .findOne(
+            {email:email},
+            (err, existingUser) => {
+                console.log('------------------------------------------');
+                console.log('err ',err);
+                console.log('existingUser ',existingUser);
+                console.log('------------------------------------------');
+                if (err) {return next(err);}
+                if (existingUser) {
+                    return res.status(422).send({error:'Email is in use'});
+                }
+
+                var body = _.pick(req.body, ['email', 'password']);
+                var user = new User(body);
+                console.log('------------------------------------------');
+                console.log('user ',user);
+                console.log('------------------------------------------');
+                user.save()
+                    .then(()=>{
+                        console.log('user saved');
+                        return user.generateAuthToken();
+                    })
+                    .then((token)=>{
+                        console.log('------------------------------------------');
+                        console.log('token generated ',token);
+                        console.log('------------------------------------------');
+                        res
+                            .header('x-auth', token)
+                            .send(user);
+                    })
+                    .catch((e)=>{
+                        console.log('------------------------------------------');
+                        console.log('catch block of user.save',e);
+                        console.log('------------------------------------------');
+                        res.status(400).send(e);
+                    })
+            }
+        )
+
+
+
+
 })
 
 app.post('/users/login', (req,res) => {
@@ -174,7 +204,10 @@ app.post('/users/login', (req,res) => {
                 })
         })
         .catch((err) => {
-            res.status(400).send();
+            console.log('------------------------------------------');
+            console.log('user not found');
+            console.log('------------------------------------------');
+            res.status(400).send(err);
         })
 })
 
