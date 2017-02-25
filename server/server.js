@@ -3,7 +3,6 @@ require('./config/config');
 const _ = require('lodash');
 const express = require("express");
 const bodyParser = require('body-parser');
-var morgan = require('morgan');
 const moment = require('moment');
 
 var {Day} = require('./models/day.js');
@@ -17,7 +16,10 @@ var app = express();
 
 app.use(bodyParser.json());
 // app.use(morgan('combined'));
-app.use(morgan('dev'));
+if (process.env.NODE_ENV !== 'production') {
+    var morgan = require('morgan');
+    app.use(morgan('dev'));
+}
 
 
 // app.use((req, res, next)=> {
