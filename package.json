@@ -11,6 +11,7 @@
     "lodash": "^4.16.4",
     "mongodb": "^2.2.10",
     "mongoose": "^4.6.3",
+    "nutritionix": "^0.6.1",
     "validator": "^6.1.0"
   },
   "devDependencies": {
