@@ -14,6 +14,9 @@ const port = process.env.PORT;
 
 var app = express();
 
+const cors = require('cors');
+app.use(cors());
+
 app.use(bodyParser.json());
 // app.use(morgan('combined'));
 if (process.env.NODE_ENV !== 'production') {
