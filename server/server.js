@@ -201,6 +201,9 @@ app.post('/users/login', (req,res) => {
                 })
         })
         .catch((err) => {
+            console.log('------------------------------------------');
+            console.log('err in heroku',err);
+            console.log('------------------------------------------');
             res.status(400).send(err);
         })
 })
