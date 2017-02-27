@@ -190,7 +190,7 @@ app.post('/users/login', (req,res) => {
         .findByCredentials(body.email, body.password)
         .then((user) => {
             console.log('------------------------------------------');
-            console.log('user on heroku',user);
+            console.log('user on heroku POST users/login',user);
             console.log('------------------------------------------');
             return user
                 .generateAuthToken()
@@ -201,9 +201,6 @@ app.post('/users/login', (req,res) => {
                 })
         })
         .catch((err) => {
-            console.log('------------------------------------------');
-            console.log('err in heroku',err);
-            console.log('------------------------------------------');
             res.status(400).send(err);
         })
 })
