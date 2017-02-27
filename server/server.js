@@ -182,6 +182,9 @@ app.post('/users', (req,res) => {
 })
 
 app.post('/users/login', (req,res) => {
+    console.log('------------------------------------------');
+    console.log('req on heroku',req);
+    console.log('------------------------------------------');
     var body = _.pick(req.body, ['email', 'password']);
     User
         .findByCredentials(body.email, body.password)
