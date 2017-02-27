@@ -189,6 +189,9 @@ app.post('/users/login', (req,res) => {
     User
         .findByCredentials(body.email, body.password)
         .then((user) => {
+            console.log('------------------------------------------');
+            console.log('user on heroku',user);
+            console.log('------------------------------------------');
             return user
                 .generateAuthToken()
                 .then((token) => {
