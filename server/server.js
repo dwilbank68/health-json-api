@@ -176,6 +176,7 @@ app.post('/users', (req,res) => {
         )
 })
 
+app.options('/users/login', cors());
 app.post('/users/login', (req,res) => {
     var body = _.pick(req.body, ['email', 'password']);
     User
