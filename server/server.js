@@ -172,12 +172,12 @@ app.post('/users/login', (req,res) => {
     User
         .findByCredentials(body.email, body.password)
         .then((user) => {
-            console.log('------------------------------------------');
-            console.log('user after findByCredentials',user);
-            console.log('------------------------------------------');
             return user
                 .generateAuthToken()
                 .then((token) => {
+                    console.log('------------------------------------------');
+                    console.log('token after findByCredentials',token);
+                    console.log('------------------------------------------');
                     res
                         .header('x-auth', token)
                         .send(user);
