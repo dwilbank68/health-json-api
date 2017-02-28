@@ -185,8 +185,7 @@ app.post('/users/login', (req,res) => {
                     console.log('------------------------------------------');
                     console.log('token after findByCredentials',token);
                     console.log('------------------------------------------');
-                    res
-                        .header('x-auth', token)
+                    res.header('x-auth', token)
                         .send(user);
                 })
         })
