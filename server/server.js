@@ -1,5 +1,4 @@
 require('./config/config');
-
 const _ = require('lodash');
 const express = require("express");
 const bodyParser = require('body-parser');
@@ -18,6 +17,7 @@ const cors = require('cors');
 app.use(cors());
 
 app.use(function(req,res,next){
+    console.log('inside cors')
     res.setHeader('Access-Control-Allow-Origin', '*');
     res.setHeader('Access-Control-Allow-Methods', 'GET, POST');
     res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,content-type, Authorization');
@@ -39,13 +39,7 @@ if (process.env.NODE_ENV !== 'production') {
 //     next();
 // })
 
-app.use(function(req,res,next){
-    res.setHeader('Access-Control-Allow-Origin', '*');
-    res.setHeader('Access-Control-Allow-Methods', 'GET, POST');
-    res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,content-type, Authorization, x-auth');
-    res.setHeader('Access-Control-Expose-Headers', 'x-auth');
-    next();
-});
+
 
 app.post('/days', authenticate, (req,res) => {
     console.log('------------------------------------------');
