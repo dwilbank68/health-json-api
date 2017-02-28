@@ -15,7 +15,7 @@ var app = express();
 
 const cors = require('cors');
 app.use(cors());
-app.options('*', cors());
+// app.options('*', cors());
 
 app.use(function(req,res,next){
     res.setHeader('Access-Control-Allow-Origin', '*');
@@ -141,7 +141,7 @@ app.get('/day/:dateString', authenticate, (req,res) => {
         })
 })
 
-app.options('/users/me', cors());
+// app.options('/users/me', cors());
 app.get('/users/me', authenticate, (req,res) => {
     res.send(req.user)
 })
@@ -176,7 +176,7 @@ app.post('/users', (req,res) => {
         )
 })
 
-app.options('/users/login', cors());
+// app.options('/users/login', cors());
 app.post('/users/login', (req,res) => {
     var body = _.pick(req.body, ['email', 'password']);
     User
