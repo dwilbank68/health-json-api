@@ -21,6 +21,7 @@ app.use(function(req,res,next){
     res.setHeader('Access-Control-Allow-Origin', '*');
     res.setHeader('Access-Control-Allow-Methods', 'GET, POST');
     res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With, content-type, Authorization, x-auth, X-Auth');
+    res.setHeader('Access-Control-Expose-Headers', 'x-auth, X-Auth');
     next();
 });
 
@@ -39,8 +40,6 @@ if (process.env.NODE_ENV !== 'production') {
 //     console.log(log);
 //     next();
 // })
-
-
 
 app.post('/days', authenticate, (req,res) => {
     console.log('------------------------------------------');
