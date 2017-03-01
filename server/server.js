@@ -25,9 +25,10 @@ app.use(function(req,res,next){
 });
 
 app.use(bodyParser.json());
-// app.use(morgan('combined'));
+
 if (process.env.NODE_ENV !== 'production') {
     var morgan = require('morgan');
+    // app.use(morgan('combined'));
     app.use(morgan('dev'));
 }
 
