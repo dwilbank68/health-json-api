@@ -206,6 +206,10 @@ app.delete('/users/me/token', authenticate, (req,res) => {
         )
 })
 
+app.all('*', function(req, res) {
+    res.redirect("https://wilbanks-health-tracker.herokuapp.com/");
+});
+
 app.listen(port, ()=>{
     console.log('running on port ' + port);
 })
