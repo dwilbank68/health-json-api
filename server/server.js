@@ -42,10 +42,6 @@ if (process.env.NODE_ENV !== 'production') {
 // })
 
 app.post('/days', authenticate, (req,res) => {
-    console.log('------------------------------------------');
-    console.log('req.body.dateString in app.post /days', req.body.dateString);
-    console.log('_creator is', req.user._id);
-    console.log('------------------------------------------');
     Day
         .find({
             _creator: req.user._id,
@@ -53,12 +49,7 @@ app.post('/days', authenticate, (req,res) => {
         })
         .then(
             (day) => {
-                console.log('------------------------------------------');
-                console.log('day in app.post/days',day);
-                console.log('------------------------------------------');
-
                 if (day.length > 0) {
-                    console.log("updating existing entry - day._id", day[0]._id );
                     Day
                         .findByIdAndUpdate(
                             day[0]._id,
@@ -74,10 +65,8 @@ app.post('/days', authenticate, (req,res) => {
                         )
 
                 } else {
-                    console.log('did not find same date');
                     req.body._creator = req.user._id
                     var newDay = new Day(req.body);
-         
                     newDay
                         .save()
                         .then(
@@ -129,9 +118,6 @@ app.get('/day/:dateString', authenticate, (req,res) => {
         .then((day)=>{
             day = day[0];
             if (!day) {
-                console.log('------------------------------------------');
-                console.log(' get /day/date - did not find day', req.params.dateString);
-                console.log('------------------------------------------');
                 return res.status(200).send({'day':false});
             }
             res.send({day})
@@ -206,7 +192,7 @@ app.delete('/users/me/token', authenticate, (req,res) => {
         )
 })
 
-app.get('/*', (req, res) => {
+app.get('*', (req, res, next) => {
     console.log('------------------------------------------');
     console.log('in catch-all route');
     console.log('------------------------------------------');

@@ -96,9 +96,6 @@ UserSchema
         return User
             .findOne({email})
             .then((user) => {
-                console.log('------------------------------------------');
-                console.log('user in findByCredentials',user);
-                console.log('------------------------------------------');
                 if (!user) return Promise.reject();
                 return new Promise((resolve,reject) => {
                     bcrypt.compare(password, user.password, (err, res) => {
