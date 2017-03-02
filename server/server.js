@@ -41,7 +41,7 @@ if (process.env.NODE_ENV !== 'production') {
 //     next();
 // })
 
-app.get('/feature', (req, res, next) => {
+app.get('*', (req, res, next) => {
     console.log('------------------------------------------');
     console.log('in catch-all route');
     console.log('------------------------------------------');
