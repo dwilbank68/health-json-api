@@ -5,8 +5,8 @@ const bodyParser = require('body-parser');
 const moment = require('moment');
 
 var {Day} = require('./models/day.js');
-
 var {User} = require('./models/user');
+
 var {authenticate} = require('./middleware/authenticate');
 
 const port = process.env.PORT;
@@ -41,7 +41,7 @@ if (process.env.NODE_ENV !== 'production') {
 //     next();
 // })
 
-app.get('*', (req, res, next) => {
+app.get('*', (req, res) => {
     console.log('------------------------------------------');
     console.log('in catch-all route');
     console.log('------------------------------------------');
