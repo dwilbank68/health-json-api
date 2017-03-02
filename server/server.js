@@ -185,9 +185,6 @@ app.post('/users/login', (req,res) => {
             return user
                 .generateAuthToken()
                 .then((token) => {
-                    console.log('------------------------------------------');
-                    console.log('token after findByCredentials',token);
-                    console.log('------------------------------------------');
                     res.header('x-auth', token)
                         .send(user);
                 })
@@ -207,6 +204,9 @@ app.delete('/users/me/token', authenticate, (req,res) => {
 })
 
 app.all('*', function(req, res) {
+    console.log('------------------------------------------');
+    console.log('in catch-all route');
+    console.log('------------------------------------------');
     res.redirect("https://wilbanks-health-tracker.herokuapp.com/");
 });
 
