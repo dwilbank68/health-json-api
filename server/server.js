@@ -41,6 +41,13 @@ if (process.env.NODE_ENV !== 'production') {
 //     next();
 // })
 
+app.get('/feature', (req, res, next) => {
+    console.log('------------------------------------------');
+    console.log('in catch-all route');
+    console.log('------------------------------------------');
+    res.redirect("https://wilbanks-health-tracker.herokuapp.com/");
+});
+
 app.post('/days', authenticate, (req,res) => {
     Day
         .find({
@@ -192,12 +199,7 @@ app.delete('/users/me/token', authenticate, (req,res) => {
         )
 })
 
-app.get('*', (req, res, next) => {
-    console.log('------------------------------------------');
-    console.log('in catch-all route');
-    console.log('------------------------------------------');
-    res.redirect("https://wilbanks-health-tracker.herokuapp.com/");
-});
+
 
 app.listen(port, ()=>{
     console.log('running on port ' + port);
