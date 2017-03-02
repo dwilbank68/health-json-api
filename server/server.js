@@ -178,6 +178,9 @@ app.post('/users', (req,res) => {
 
 app.options('/users/login', cors());
 app.post('/users/login', (req,res) => {
+    console.log('------------------------------------------');
+    console.log(' inside /users/login route handler');
+    console.log('------------------------------------------');
     var body = _.pick(req.body, ['email', 'password']);
     User
         .findByCredentials(body.email, body.password)
@@ -203,7 +206,7 @@ app.delete('/users/me/token', authenticate, (req,res) => {
         )
 })
 
-app.get('/feature', authenticate, (req, res) => {
+app.get('/*', (req, res) => {
     console.log('------------------------------------------');
     console.log('in catch-all route');
     console.log('------------------------------------------');
