@@ -203,7 +203,7 @@ app.delete('/users/me/token', authenticate, (req,res) => {
         )
 })
 
-app.get('/*', function(req, res) {
+app.get('/feature', authenticate, (req, res) => {
     console.log('------------------------------------------');
     console.log('in catch-all route');
     console.log('------------------------------------------');
