@@ -194,11 +194,12 @@ app.delete('/users/me/token', authenticate, (req,res) => {
         )
 })
 
+// app.use(express.static(__dirname + '/public'));
 app.get('*', (req, res) => {
     console.log('------------------------------------------');
     console.log('in catch-all route');
     console.log('------------------------------------------');
-    res.redirect("https://wilbanks-health-tracker.herokuapp.com/");
+    // response.sendFile(path.resolve(__dirname, 'public', 'index.html'));
 });
 
 app.listen(port, ()=>{
